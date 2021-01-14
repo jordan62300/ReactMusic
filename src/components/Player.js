@@ -1,6 +1,7 @@
 import React , { useEffect } from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlay , faAngleLeft , faAngleRight ,faPause } from '@fortawesome/free-solid-svg-icons';
+import {playAudio} from '../utils'
 
 const Player = ({
     setCurrentSong,
@@ -11,10 +12,10 @@ const Player = ({
     songInfo,
     setSongInfo,
     songs,
-    setSongs
+    setSongs,
 }) => {
 
-    // use Effect
+    // use Effect 
     useEffect(() => {
         const newSongs = songs.map((music) => {
           if(music.id === currentSong.id) {
@@ -63,6 +64,7 @@ const Player = ({
         let currentIndex = songs.findIndex((song) => song.id === currentSong.id)
         if( direction === 'skip-forward' ) {
             setCurrentSong(songs[(currentIndex + 1) % songs.length] )
+
         } else {
             if((currentIndex -1) % songs.length === -1){
                 setCurrentSong(songs[songs.length - 1])
@@ -71,6 +73,7 @@ const Player = ({
             }
            
         }
+        playAudio(isPlaying,audioRef)
     }
 
     // drag the player input duration and return the current time of the song
