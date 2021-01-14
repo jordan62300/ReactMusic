@@ -1,7 +1,7 @@
 import React , { useEffect } from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlay , faAngleLeft , faAngleRight ,faPause } from '@fortawesome/free-solid-svg-icons';
-import {playAudio} from '../utils'
+
 
 const Player = ({
     setCurrentSong,
@@ -60,20 +60,20 @@ const Player = ({
     }
 
     // skip to the next or previous music
-    const skipTrackHandler = (direction) => {
+    const skipTrackHandler =  async (direction) => {
         let currentIndex = songs.findIndex((song) => song.id === currentSong.id)
         if( direction === 'skip-forward' ) {
-            setCurrentSong(songs[(currentIndex + 1) % songs.length] )
+          await  setCurrentSong(songs[(currentIndex + 1) % songs.length] )
 
-        } else {
-            if((currentIndex -1) % songs.length === -1){
-                setCurrentSong(songs[songs.length - 1])
+        } if(direction === 'skip-back') {
+            if((currentIndex -1) % songs.length === -1) {
+            await    setCurrentSong(songs[songs.length - 1])
             } else{
-                setCurrentSong(songs[(currentIndex - 1)]  )
+               await setCurrentSong(songs[(currentIndex - 1)]  )
             }
            
         }
-        playAudio(isPlaying,audioRef)
+        if(isPlaying) audioRef.current.play()
     }
 
     // drag the player input duration and return the current time of the song
@@ -93,7 +93,7 @@ const Player = ({
      <div className="player">
         <div className="time-control">
             <p>{getTime(songInfo.currentTime)}</p>
-            <div className="track">
+            <div style={{background: `linear-gradient(to right ,${currentSong.color[0]} , ${currentSong.color[1]} )`}} className="track">
                 <input onChange={dragHandler}  max={songInfo.duration  || 0} value={songInfo.currentTime} type="range"/>
                 <div style={trackAnim} className="animate-track"></div>
             </div>
