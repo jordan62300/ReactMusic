@@ -84,12 +84,20 @@ const Player = ({
         setSongInfo({...songInfo,currentTime})
     }
 
+    // Add styles 
+    const trackAnim = {
+        transform : `translateX(${songInfo.animationPercentage}%)`
+    }
+
     return(
      <div className="player">
         <div className="time-control">
             <p>{getTime(songInfo.currentTime)}</p>
-            <input onChange={dragHandler}  max={songInfo.duration  || 0} value={songInfo.currentTime} type="range"/>
-            <p>{getTime(songInfo.duration)}</p>
+            <div className="track">
+                <input onChange={dragHandler}  max={songInfo.duration  || 0} value={songInfo.currentTime} type="range"/>
+                <div style={trackAnim} className="animate-track"></div>
+            </div>
+            <p>{songInfo.duration ? getTime(songInfo.duration) : '0:00'}</p>
         </div>
         <div className="play-control">
             <FontAwesomeIcon size="2x" onClick={() => skipTrackHandler('skip-back')} className="skip-back" icon={faAngleLeft}/>

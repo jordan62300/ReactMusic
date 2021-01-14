@@ -15,7 +15,8 @@ function App() {
     // STATE
     const [songInfo, setSongInfo] = useState({
       currentTime:0,
-      duration:0
+      duration:0,
+      animationPercentage:0,
   })
   const [songs,setSongs] = useState(data())
   const [currentSong,setCurrentSong] = useState(songs[0])
@@ -27,7 +28,13 @@ function App() {
   const timeUpdateHandler = (e) => {
     const currentTime = e.target.currentTime;
     const duration = e.target.duration;
-    setSongInfo({...songInfo,currentTime,duration})
+    // Calul %
+    const roundedCurrentTime = Math.round(currentTime)
+    const roundedduration = Math.round(duration)
+    const animationPercentage = Math.round((roundedCurrentTime /roundedduration) * 100)
+
+    
+    setSongInfo({...songInfo,currentTime,duration,animationPercentage})
 }
 
   return (
