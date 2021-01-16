@@ -1,4 +1,4 @@
-import React , { useEffect } from 'react'
+import React   from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlay , faAngleLeft , faAngleRight ,faPause } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,24 +15,7 @@ const Player = ({
     setSongs,
 }) => {
 
-    // use Effect 
-    useEffect(() => {
-        const newSongs = songs.map((music) => {
-          if(music.id === currentSong.id) {
-              return{
-                  ...music,
-                  active:true,
-              };
-          } else{
-              return{
-                  ...music,
-                  active:false,
-                    };
-          }
-        
-        })
-        setSongs(newSongs);
-    },[currentSong])
+   
 
     // REF
     
@@ -64,12 +47,14 @@ const Player = ({
         let currentIndex = songs.findIndex((song) => song.id === currentSong.id)
         if( direction === 'skip-forward' ) {
           await  setCurrentSong(songs[(currentIndex + 1) % songs.length] )
-
+          activeLibraryHandler(songs[(currentIndex + 1) % songs.length])
         } if(direction === 'skip-back') {
             if((currentIndex -1) % songs.length === -1) {
             await    setCurrentSong(songs[songs.length - 1])
+            activeLibraryHandler(songs[songs.length - 1])
             } else{
-               await setCurrentSong(songs[(currentIndex - 1)]  )
+               await setCurrentSong(songs[(currentIndex - 1)])
+               activeLibraryHandler(songs[(currentIndex - 1)])
             }
            
         }
@@ -87,6 +72,24 @@ const Player = ({
     // Add styles 
     const trackAnim = {
         transform : `translateX(${songInfo.animationPercentage}%)`
+    }
+
+    const activeLibraryHandler = (nextPrevSong) => {
+        const newSongs = songs.map((music) => {
+            if(music.id === nextPrevSong.id) {
+                return{
+                    ...music,
+                    active:true,
+                };
+            } else{
+                return{
+                    ...music,
+                    active:false,
+                      };
+            }
+          
+          })
+          setSongs(newSongs);
     }
 
     return(
